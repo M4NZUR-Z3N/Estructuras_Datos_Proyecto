@@ -2,7 +2,7 @@ package entities;
 import java.util.ArrayList;
 
 public class Mascota {
-    //Atributos
+    // Atributos (según lo solicitado)
     private String nombre;
     private double precio;
     private String especie;
@@ -10,7 +10,7 @@ public class Mascota {
     private int edad;
     private ArrayList<String> listaImagenes;
 
-    //Metodos
+    // Constructor
     public Mascota(
         String pNombre,
         double pPrecio,
@@ -18,13 +18,77 @@ public class Mascota {
         String pRaza,
         int pEdad
     ){
-        nombre = pNombre;
-        precio = pPrecio;
-        especie = pEspecie;
-        raza = pRaza;
-        edad = pEdad;
-        listaImagenes = new ArrayList<String>();
+        this.nombre = pNombre;
+        this.precio = pPrecio;
+        this.especie = pEspecie;
+        this.raza = pRaza;
+        this.edad = pEdad;
+        this.listaImagenes = new ArrayList<String>();
     }
 
+    // Getters y Setters
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
+    public String getEspecie() {
+        return especie;
+    }
+
+    public void setEspecie(String especie) {
+        this.especie = especie;
+    }
+
+    public String getRaza() {
+        return raza;
+    }
+
+    public void setRaza(String raza) {
+        this.raza = raza;
+    }
+
+    public int getEdad() {
+        return edad;
+    }
+
+    public void setEdad(int edad) {
+        this.edad = edad;
+    }
+
+    public ArrayList<String> getListaImagenes() {
+        return listaImagenes;
+    }
+
+    // Método para agregar imágenes
+    public void agregarImagen(String rutaImagen) {
+        this.listaImagenes.add(rutaImagen);
+    }
     
+    // Método para calcular costo total (precio * cantidad)
+    public double calcularCostoTotal(int cantidad) {
+        return this.precio * cantidad;
+    }
+    
+    @Override
+    public String toString() {
+        return "Mascota{" +
+                "nombre='" + nombre + '\'' +
+                ", precio=" + precio +
+                ", especie='" + especie + '\'' +
+                ", raza='" + raza + '\'' +
+                ", edad=" + edad +
+                '}';
+    }
 }
