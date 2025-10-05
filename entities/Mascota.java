@@ -1,4 +1,5 @@
 package entities;
+import java.io.File;
 import java.util.ArrayList;
 
 public class Mascota {
@@ -8,7 +9,8 @@ public class Mascota {
     private String especie;
     private String raza;
     private int edad;
-    private ArrayList<String> listaImagenes;
+    private String rutaCarpeta; //Guarda la ruta de la carpeta donde iran las imagenes de la mascota
+    private ArrayList<String> listaImagenes; //Guarda los nombres delos archivos
 
     // Constructor
     public Mascota(
@@ -23,6 +25,9 @@ public class Mascota {
         this.especie = pEspecie;
         this.raza = pRaza;
         this.edad = pEdad;
+        this.rutaCarpeta = "resources/imagenesMascotas/" + pNombre;
+        File carpetaDestino = new File(rutaCarpeta);
+        carpetaDestino.mkdirs();
         this.listaImagenes = new ArrayList<String>();
     }
 
@@ -67,12 +72,17 @@ public class Mascota {
         this.edad = edad;
     }
 
+    public String getRuta(){
+        return rutaCarpeta;
+    }
+
     public ArrayList<String> getListaImagenes() {
         return listaImagenes;
     }
 
     // Método para agregar imágenes
     public void agregarImagen(String rutaImagen) {
+
         this.listaImagenes.add(rutaImagen);
     }
     

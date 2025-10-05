@@ -2,20 +2,20 @@ package lists;
 import entities.Mascota;
 
 public class ListaMascotas {
-    private NodoMascota cabeza;
+    private NodoMascota primero;
     private int tamaño;
     
     // Constructor
     public ListaMascotas() {
-        this.cabeza = null;
+        this.primero = null;
         this.tamaño = 0;
     }
     
     // 1. Insertar al inicio
     public void insertarAlInicio(Mascota mascota) {
         NodoMascota nuevoNodo = new NodoMascota(mascota);
-        nuevoNodo.setSiguiente(cabeza);
-        cabeza = nuevoNodo;
+        nuevoNodo.setSiguiente(primero);
+        primero = nuevoNodo;
         tamaño++;
     }
     
@@ -23,10 +23,10 @@ public class ListaMascotas {
     public void insertarAlFinal(Mascota mascota) {
         NodoMascota nuevoNodo = new NodoMascota(mascota);
         
-        if (cabeza == null) {
-            cabeza = nuevoNodo;
+        if (primero == null) {
+            primero = nuevoNodo;
         } else {
-            NodoMascota actual = cabeza;
+            NodoMascota actual = primero;
             while (actual.getSiguiente() != null) {
                 actual = actual.getSiguiente();
             }
@@ -37,7 +37,7 @@ public class ListaMascotas {
     
     // 3. Modificar mascota por nombre
     public boolean modificarMascota(String nombre, Mascota mascotaActualizada) {
-        NodoMascota actual = cabeza;
+        NodoMascota actual = primero;
         
         while (actual != null) {
             if (actual.getMascota().getNombre().equals(nombre)) {
@@ -50,27 +50,19 @@ public class ListaMascotas {
     }
     
     // 4. Agregar imagen a una mascota específica
-    public boolean agregarImagenAMascota(String nombreMascota, String rutaImagen) {
-        NodoMascota actual = cabeza;
-        
-        while (actual != null) {
-            if (actual.getMascota().getNombre().equals(nombreMascota)) {
-                actual.getMascota().agregarImagen(rutaImagen);
+    public boolean agregarImagenAMascota(Mascota mascota, String rutaImagen) {
+                mascota.agregarImagen(rutaImagen);
                 return true;
-            }
-            actual = actual.getSiguiente();
-        }
-        return false; // No se encontró la mascota
     }
     
     // 5. Método para generar reporte de costos
     public void generarReporteCostos() {
-        if (cabeza == null) {
+        if (primero == null) {
             System.out.println("La lista de mascotas está vacía.");
             return;
         }
         
-        NodoMascota actual = cabeza;
+        NodoMascota actual = primero;
         double costoTotalAcumulado = 0;
         
         System.out.println("=== REPORTE DE COSTOS DE MASCOTAS ===");
@@ -93,12 +85,12 @@ public class ListaMascotas {
     
     // 6. Mostrar todas las mascotas
     public void mostrarMascotas() {
-        if (cabeza == null) {
+        if (primero == null) {
             System.out.println("La lista de mascotas está vacía.");
             return;
         }
         
-        NodoMascota actual = cabeza;
+        NodoMascota actual = primero;
         int contador = 1;
         
         System.out.println("=== LISTA DE MASCOTAS ===");
@@ -111,7 +103,7 @@ public class ListaMascotas {
     
     // 7. Buscar mascota por nombre
     public Mascota buscarMascota(String nombre) {
-        NodoMascota actual = cabeza;
+        NodoMascota actual = primero;
         
         while (actual != null) {
             if (actual.getMascota().getNombre().equals(nombre)) {
@@ -124,19 +116,19 @@ public class ListaMascotas {
     
     // 8. Eliminar mascota por nombre
     public boolean eliminarMascota(String nombre) {
-        if (cabeza == null) {
+        if (primero == null) {
             return false;
         }
         
-        // Caso especial: eliminar la cabeza
-        if (cabeza.getMascota().getNombre().equals(nombre)) {
-            cabeza = cabeza.getSiguiente();
+        // Caso especial: eliminar la primero
+        if (primero.getMascota().getNombre().equals(nombre)) {
+            primero = primero.getSiguiente();
             tamaño--;
             return true;
         }
         
         // Buscar en el resto de la lista
-        NodoMascota actual = cabeza;
+        NodoMascota actual = primero;
         NodoMascota anterior = null;
         
         while (actual != null && !actual.getMascota().getNombre().equals(nombre)) {
@@ -159,6 +151,6 @@ public class ListaMascotas {
     }
     
     public boolean estaVacia() {
-        return cabeza == null;
+        return primero == null;
     }
 }

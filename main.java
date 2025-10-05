@@ -1,6 +1,7 @@
 import entities.Mascota;
-import lists.ListaMascotas;
 import java.util.Scanner;
+import lists.ListaMascotas;
+import view.PanelManager;
 
 public class main {
     private static ListaMascotas listaMascotas = new ListaMascotas();
@@ -10,7 +11,7 @@ public class main {
         System.out.println("🐾 BIENVENIDO A FRIENDS FOR LIFE 🐾");
         System.out.println("Sistema de Gestión de Mascotas\n");
         
-        menuPrincipal();
+        PanelManager.programa();
     }
     
     public static void menuPrincipal() {
@@ -128,12 +129,12 @@ public class main {
         
         System.out.print("Ingrese la ruta de la imagen: ");
         String rutaImagen = scanner.nextLine();
-        
+        /*
         if (listaMascotas.agregarImagenAMascota(nombre, rutaImagen)) {
             System.out.println("Imagen agregada exitosamente.");
         } else {
             System.out.println("No se encontró una mascota con ese nombre.");
-        }
+        }*/
     }
     
     private static void buscarMascota() {
