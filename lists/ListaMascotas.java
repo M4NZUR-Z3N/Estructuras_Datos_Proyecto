@@ -1,5 +1,6 @@
 package lists;
 import entities.Mascota;
+import java.util.ArrayList;
 
 public class ListaMascotas {
     private NodoMascota primero;
@@ -50,22 +51,31 @@ public class ListaMascotas {
     }
     
     // 4. Agregar imagen a una mascota específica
-    public boolean agregarImagenAMascota(Mascota mascota, String rutaImagen) {
-                mascota.agregarImagen(rutaImagen);
+    public boolean agregarImagenAMascota(String nombreMascota, String rutaImagen) {
+        NodoMascota actual = primero;
+        
+        while (actual != null) {
+            if (actual.getMascota().getNombre().equals(nombreMascota)) {
+                actual.getMascota().agregarImagen(rutaImagen);
                 return true;
+            }
+            actual = actual.getSiguiente();
+        }
+        return false; // No se encontró la mascota
     }
     
     // 5. Método para generar reporte de costos
-    public void generarReporteCostos() {
+    public String generarReporteCostos() {
+        StringBuilder reporte = new StringBuilder();
+        
         if (primero == null) {
-            System.out.println("La lista de mascotas está vacía.");
-            return;
+            return "La lista de mascotas está vacía.";
         }
         
         NodoMascota actual = primero;
         double costoTotalAcumulado = 0;
         
-        System.out.println("=== REPORTE DE COSTOS DE MASCOTAS ===");
+        reporte.append("=== REPORTE DE COSTOS DE MASCOTAS ===\n");
         
         while (actual != null) {
             Mascota mascota = actual.getMascota();
@@ -73,14 +83,15 @@ public class ListaMascotas {
             int cantidad = 1;
             double costoTotalMascota = mascota.calcularCostoTotal(cantidad);
             
-            System.out.printf("Mascota: %s | Precio unitario: ₡%.2f | Cantidad: %d | Costo total: ₡%.2f%n",
-                    mascota.getNombre(), mascota.getPrecio(), cantidad, costoTotalMascota);
+            reporte.append(String.format("Mascota: %s | Precio unitario: ₡%.2f | Cantidad: %d | Costo total: ₡%.2f\n",
+                    mascota.getNombre(), mascota.getPrecio(), cantidad, costoTotalMascota));
             
             costoTotalAcumulado += costoTotalMascota;
             actual = actual.getSiguiente();
         }
         
-        System.out.printf("=== COSTO TOTAL ACUMULADO: ₡%.2f ===%n", costoTotalAcumulado);
+        reporte.append(String.format("=== COSTO TOTAL ACUMULADO: ₡%.2f ===", costoTotalAcumulado));
+        return reporte.toString();
     }
     
     // 6. Mostrar todas las mascotas
@@ -143,6 +154,18 @@ public class ListaMascotas {
         }
         
         return false; // No se encontró
+    }
+
+    public ArrayList<Mascota> obtenerTodasLasMascotas() {
+        ArrayList<Mascota> mascotas = new ArrayList<>();
+        NodoMascota actual = primero;
+        
+        while (actual != null) {
+            mascotas.add(actual.getMascota());
+            actual = actual.getSiguiente();
+        }
+        
+        return mascotas;
     }
     
     // Getters

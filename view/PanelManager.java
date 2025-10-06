@@ -84,10 +84,10 @@ import lists.ListaMascotas;
                 agregarImagenAMascota();
                 break;
             case 5:
-                listaMascotas.generarReporteCostos();
+                mostrarReporteCostos();
                 break;
             case 6:
-                listaMascotas.mostrarMascotas();
+                mostrarTodasLasMascotas();
                 break;
             case 7:
                 buscarMascota();
@@ -199,7 +199,7 @@ import lists.ListaMascotas;
     private static void agregarImagenAMascota() {
         String nombre = JOptionPane.showInputDialog("Ingrese el nombre de la mascota:");
         if (nombre == null || nombre.isBlank()) return;
-    
+        
         Mascota mascota = listaMascotas.buscarMascota(nombre);
         if (mascota == null) {
             JOptionPane.showMessageDialog(null, "No se encontró una mascota con ese nombre.");
@@ -224,7 +224,7 @@ import lists.ListaMascotas;
     
             try {
                 Files.copy(archivoSeleccionado.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                boolean exito = listaMascotas.agregarImagenAMascota(mascota, destino.getPath());
+                boolean exito = listaMascotas.agregarImagenAMascota(nombre, destino.getPath());
                 if (exito) {
                     JOptionPane.showMessageDialog(null, "Imagen agregada exitosamente.");
                 } else {
@@ -238,17 +238,67 @@ import lists.ListaMascotas;
     
     
     private static void buscarMascota() {
-        System.out.println("\n--- Buscar Mascota ---");
-        System.out.print("Ingrese el nombre de la mascota: ");
-        String nombre = scanner.nextLine();
-        
-        Mascota mascota = listaMascotas.buscarMascota(nombre);
-        if (mascota != null) {
-            System.out.println("Mascota encontrada:");
-            System.out.println(mascota);
-        } else {
-            System.out.println("No se encontró una mascota con ese nombre.");
+        panel.removeAll();
+
+        JPanel buscarPanel = new JPanel();
+        buscarPanel.setLayout(new BoxLayout(buscarPanel, BoxLayout.Y_AXIS));
+        buscarPanel.setBackground(Color.WHITE);
+        buscarPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
+
+        JLabel titulo = new JLabel("Buscar Mascota");
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 28));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buscarPanel.add(titulo);
+        buscarPanel.add(Box.createVerticalStrut(30));
+
+        JTextField campoNombre = new JTextField();
+        buscarPanel.add(crearCampo("Nombre de la mascota:", campoNombre));
+
+        JButton buscarBtn = new JButton("Buscar");
+        buscarBtn.setFont(new Font("SansSerif", Font.BOLD, 18));
+        buscarBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        buscarBtn.setMaximumSize(new Dimension(200, 40));
+
+        buscarBtn.addActionListener(e -> {
+            String nombre = campoNombre.getText().trim();
+            Mascota mascota = listaMascotas.buscarMascota(nombre);
+
+            if (mascota != null) {
+                panel.removeAll();
+                panel.add(mostrarMascota(mascota));
+                ventana.refresh();
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró una mascota con ese nombre.");
+                PanelManager.mostrarMenuPrincipal();
+            }
+        });
+
+        buscarPanel.add(Box.createVerticalStrut(20));
+        buscarPanel.add(buscarBtn);
+
+        panel.add(buscarPanel);
+        ventana.refresh();
+    }
+
+    private static void mostrarTodasLasMascotas(){
+        panel.removeAll();
+
+        JPanel listaPanel = new JPanel();
+        listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.Y_AXIS));
+        listaPanel.setBackground(Color.WHITE);
+        listaPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        for (Mascota mascota : listaMascotas.obtenerTodasLasMascotas()) {
+            listaPanel.add(mostrarMascota(mascota));
+            listaPanel.add(Box.createVerticalStrut(10)); // Espaciado entre mascotas
         }
+
+        JScrollPane scrollPane = new JScrollPane(listaPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        panel.add(scrollPane);
+        ventana.refresh();
     }
     
     private static void eliminarMascota() {
@@ -263,6 +313,129 @@ import lists.ListaMascotas;
         }
     }
     
+    private static JPanel mostrarMascota(Mascota mascota) {
+        JPanel mascotaPanel = new JPanel();
+
+        mascotaPanel.setLayout(new BorderLayout());
+        mascotaPanel.setBackground(Color.WHITE);
+        mascotaPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Panel para mostrar información de la mascota
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBackground(Color.WHITE);
+
+        JLabel nombreLabel = new JLabel("Nombre: " + mascota.getNombre());
+        JLabel precioLabel = new JLabel("Precio: " + mascota.getPrecio());
+        JLabel especieLabel = new JLabel("Especie: " + mascota.getEspecie());
+        JLabel razaLabel = new JLabel("Raza: " + mascota.getRaza());
+        JLabel edadLabel = new JLabel("Edad: " + mascota.getEdad() + " meses");
+
+        nombreLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        precioLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        especieLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        razaLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        edadLabel.setFont(new Font("SansSerif", Font.PLAIN, 16));
+
+        infoPanel.add(nombreLabel);
+        infoPanel.add(precioLabel);
+        infoPanel.add(especieLabel);
+        infoPanel.add(razaLabel);
+        infoPanel.add(edadLabel);
+
+        mascotaPanel.add(infoPanel, BorderLayout.WEST);
+
+        // Panel para mostrar imágenes
+        JPanel imagenPanel = new JPanel();
+        imagenPanel.setLayout(new BorderLayout());
+        imagenPanel.setBackground(Color.WHITE);
+        imagenPanel.setPreferredSize(new Dimension(150, 150)); // Reducir el tamaño del panel de la imagen
+
+        File carpetaImagenes = new File(mascota.getRuta());
+        File[] imagenes = carpetaImagenes.exists() ? carpetaImagenes.listFiles((dir, name) -> name.toLowerCase().endsWith(".jpg") || name.toLowerCase().endsWith(".png")) : new File[0];
+
+        JLabel imagenLabel = new JLabel();
+        imagenLabel.setHorizontalAlignment(JLabel.CENTER);
+        imagenLabel.setVerticalAlignment(JLabel.CENTER);
+
+        // Si no hay imágenes, usar la imagen por defecto
+        if (imagenes == null || imagenes.length == 0) {
+            ImageIcon defaultIcon = new ImageIcon("resources/imagenesMascotas/default.jpg");
+            imagenLabel.setIcon(new ImageIcon(defaultIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+        } else {
+            // Mostrar la primera imagen
+            final int[] indiceActual = {0};
+            ImageIcon primeraImagen = new ImageIcon(imagenes[indiceActual[0]].getPath());
+            imagenLabel.setIcon(new ImageIcon(primeraImagen.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+
+            // Botón para ir a la imagen anterior
+            JButton botonIzquierda = new JButton("<");
+            botonIzquierda.setPreferredSize(new Dimension(40, 30)); // Limitar altura del botón
+            botonIzquierda.setFont(new Font("SansSerif", Font.PLAIN, 12)); // Ajustar el tamaño de la fuente
+            botonIzquierda.addActionListener(e -> {
+                indiceActual[0] = (indiceActual[0] - 1 + imagenes.length) % imagenes.length;
+                ImageIcon nuevaImagen = new ImageIcon(imagenes[indiceActual[0]].getPath());
+                imagenLabel.setIcon(new ImageIcon(nuevaImagen.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+                ventana.refresh();
+            });
+
+            // Botón para ir a la imagen siguiente
+            JButton botonDerecha = new JButton(">");
+            botonDerecha.setPreferredSize(new Dimension(40, 30)); // Limitar altura del botón
+            botonDerecha.setFont(new Font("SansSerif", Font.PLAIN, 12)); // Ajustar el tamaño de la fuente
+            botonDerecha.setPreferredSize(new Dimension(40, 30)); // Limitar altura del botón
+            botonDerecha.addActionListener(e -> {
+                indiceActual[0] = (indiceActual[0] + 1) % imagenes.length;
+                ImageIcon nuevaImagen = new ImageIcon(imagenes[indiceActual[0]].getPath());
+                imagenLabel.setIcon(new ImageIcon(nuevaImagen.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+                ventana.refresh();
+            });
+
+            imagenPanel.add(botonIzquierda, BorderLayout.WEST);
+            imagenPanel.add(botonDerecha, BorderLayout.EAST);
+        }
+
+        imagenPanel.add(imagenLabel, BorderLayout.CENTER);
+        mascotaPanel.add(imagenPanel, BorderLayout.EAST);
+
+        return mascotaPanel;
+    }
+
+    public static void mostrarReporteCostos() {
+        panel.removeAll();
+
+        JPanel reportePanel = new JPanel();
+        reportePanel.setLayout(new BoxLayout(reportePanel, BoxLayout.Y_AXIS));
+        reportePanel.setBackground(Color.WHITE);
+        reportePanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
+
+        JLabel titulo = new JLabel("Reporte de Costos");
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 28));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        reportePanel.add(titulo);
+        reportePanel.add(Box.createVerticalStrut(30));
+
+        JTextArea areaTexto = new JTextArea();
+        areaTexto.setEditable(false);
+        areaTexto.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        areaTexto.setText(listaMascotas.generarReporteCostos());
+        JScrollPane scrollPane = new JScrollPane(areaTexto);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+        reportePanel.add(scrollPane);
+
+        JButton volverBtn = new JButton("Volver al Menú Principal");
+        volverBtn.setFont(new Font("SansSerif", Font.BOLD, 18));
+        volverBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        volverBtn.addActionListener(e -> mostrarMenuPrincipal());
+
+        reportePanel.add(Box.createVerticalStrut(20));
+        reportePanel.add(volverBtn);
+
+        panel.add(reportePanel);
+        ventana.refresh();
+    }
 
     public static JButton estiloBoton(){
         return null;

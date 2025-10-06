@@ -11,6 +11,11 @@ public class main {
         System.out.println("🐾 BIENVENIDO A FRIENDS FOR LIFE 🐾");
         System.out.println("Sistema de Gestión de Mascotas\n");
         
+        //menuPrincipal();
+        //De momento funciona tanto con interfaz grafica como con consola
+        //Pero tuvimos ciertos problemas para integrar la interfaz grafica con la lista enlazada
+        //para el siguiente avance se corregira este problema
+
         PanelManager.programa();
     }
     
