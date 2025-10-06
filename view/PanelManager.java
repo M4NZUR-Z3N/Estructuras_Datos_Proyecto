@@ -97,6 +97,7 @@ import lists.ListaMascotas;
                 break;
             case 9:
                 System.out.println("¡Gracias por usar Friends for Life!");
+                System.exit(0);
                 break;
             default:
                 System.out.println("Opción inválida. Intente nuevamente.");
@@ -259,6 +260,11 @@ import lists.ListaMascotas;
         buscarBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         buscarBtn.setMaximumSize(new Dimension(200, 40));
 
+        JButton volverBtn = new JButton("Volver");
+        volverBtn.addActionListener(e ->{
+            mostrarMenuPrincipal();
+        });
+
         buscarBtn.addActionListener(e -> {
             String nombre = campoNombre.getText().trim();
             Mascota mascota = listaMascotas.buscarMascota(nombre);
@@ -266,6 +272,7 @@ import lists.ListaMascotas;
             if (mascota != null) {
                 panel.removeAll();
                 panel.add(mostrarMascota(mascota));
+                panel.add(volverBtn);
                 ventana.refresh();
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontró una mascota con ese nombre.");
@@ -297,20 +304,60 @@ import lists.ListaMascotas;
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
+        
+        JButton volverBtn = new JButton("Volver");
+        volverBtn.addActionListener(e ->{
+            mostrarMenuPrincipal();
+        });
+
         panel.add(scrollPane);
+        panel.add(volverBtn);
         ventana.refresh();
     }
     
+
     private static void eliminarMascota() {
-        System.out.println("\n--- Eliminar Mascota ---");
-        System.out.print("Ingrese el nombre de la mascota a eliminar: ");
-        String nombre = scanner.nextLine();
-        
-        if (listaMascotas.eliminarMascota(nombre)) {
-            System.out.println("Mascota eliminada exitosamente.");
-        } else {
-            System.out.println("No se encontró una mascota con ese nombre.");
-        }
+        panel.removeAll();
+
+        JPanel eliminarPanel = new JPanel();
+        eliminarPanel.setLayout(new BoxLayout(eliminarPanel, BoxLayout.Y_AXIS));
+        eliminarPanel.setBackground(Color.WHITE);
+        eliminarPanel.setBorder(BorderFactory.createEmptyBorder(50, 100, 50, 100));
+
+        JLabel titulo = new JLabel("Eliminar Mascota");
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 28));
+        titulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        eliminarPanel.add(titulo);
+        eliminarPanel.add(Box.createVerticalStrut(30));
+
+        JTextField campoNombre = new JTextField();
+        eliminarPanel.add(crearCampo("Nombre de la mascota a eliminar:", campoNombre));
+
+        JButton eliminarBtn = new JButton("Eliminar");
+        eliminarBtn.setFont(new Font("SansSerif", Font.BOLD, 18));
+        eliminarBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+        eliminarBtn.setMaximumSize(new Dimension(200, 40));
+
+        JButton volverBtn = new JButton("Volver");
+        volverBtn.addActionListener(e -> mostrarMenuPrincipal());
+
+        eliminarBtn.addActionListener(e -> {
+            String nombre = campoNombre.getText().trim();
+            if (listaMascotas.eliminarMascota(nombre)) {
+                JOptionPane.showMessageDialog(null, "Mascota eliminada exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró una mascota con ese nombre.");
+            }
+            mostrarMenuPrincipal();
+        });
+
+        eliminarPanel.add(Box.createVerticalStrut(20));
+        eliminarPanel.add(eliminarBtn);
+        eliminarPanel.add(Box.createVerticalStrut(10));
+        eliminarPanel.add(volverBtn);
+
+        panel.add(eliminarPanel);
+        ventana.refresh();
     }
     
     private static JPanel mostrarMascota(Mascota mascota) {
@@ -364,35 +411,11 @@ import lists.ListaMascotas;
             imagenLabel.setIcon(new ImageIcon(defaultIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
         } else {
             // Mostrar la primera imagen
+            //ToDo Luego se podrán mostrar las distintas imagenes ingresadas
             final int[] indiceActual = {0};
             ImageIcon primeraImagen = new ImageIcon(imagenes[indiceActual[0]].getPath());
             imagenLabel.setIcon(new ImageIcon(primeraImagen.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
-
-            // Botón para ir a la imagen anterior
-            JButton botonIzquierda = new JButton("<");
-            botonIzquierda.setPreferredSize(new Dimension(40, 30)); // Limitar altura del botón
-            botonIzquierda.setFont(new Font("SansSerif", Font.PLAIN, 12)); // Ajustar el tamaño de la fuente
-            botonIzquierda.addActionListener(e -> {
-                indiceActual[0] = (indiceActual[0] - 1 + imagenes.length) % imagenes.length;
-                ImageIcon nuevaImagen = new ImageIcon(imagenes[indiceActual[0]].getPath());
-                imagenLabel.setIcon(new ImageIcon(nuevaImagen.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
-                ventana.refresh();
-            });
-
-            // Botón para ir a la imagen siguiente
-            JButton botonDerecha = new JButton(">");
-            botonDerecha.setPreferredSize(new Dimension(40, 30)); // Limitar altura del botón
-            botonDerecha.setFont(new Font("SansSerif", Font.PLAIN, 12)); // Ajustar el tamaño de la fuente
-            botonDerecha.setPreferredSize(new Dimension(40, 30)); // Limitar altura del botón
-            botonDerecha.addActionListener(e -> {
-                indiceActual[0] = (indiceActual[0] + 1) % imagenes.length;
-                ImageIcon nuevaImagen = new ImageIcon(imagenes[indiceActual[0]].getPath());
-                imagenLabel.setIcon(new ImageIcon(nuevaImagen.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
-                ventana.refresh();
-            });
-
-            imagenPanel.add(botonIzquierda, BorderLayout.WEST);
-            imagenPanel.add(botonDerecha, BorderLayout.EAST);
+            
         }
 
         imagenPanel.add(imagenLabel, BorderLayout.CENTER);
