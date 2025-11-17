@@ -2,37 +2,36 @@ package main;
 
 import entities.Cliente;
 import entities.Mascota;
-import lists.ArbolMascotas;  // 🔥 Árbol desde package lists
-import lists.ListaMascotas;  // Lista para carritos
+import entities.Tienda;
 import java.util.Scanner;
 
 public class Main {
-    private static ArbolMascotas inventario = new ArbolMascotas(); // 🔥 ÁRBOL BINARIO
-    private static Cliente[] colaClientes;
-    private static int frente = 0;
-    private static int fin = -1;
-    private static int tamañoCola = 0;
-    private static final int CAPACIDAD_COLA = 50;
+    private static Tienda tienda;
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        colaClientes = new Cliente[CAPACIDAD_COLA];
+        tienda = new Tienda("Friends for Life", 50);
+
+        //Se eliminó la ventana gráfica para centrarse en la consola hasta tener la consigna final del proyecto
+        //Sentimos que debió darse una consigna al principio con respecto a que opciones terminaria teniendo
+        //la interfaz grafica en el avance final del proyecto para planearlo mejor desde el inicio. Pero ya se tiene
+        //una base para la futura interfaz gráfica.
 
         System.out.println("🐾 BIENVENIDO A FRIENDS FOR LIFE 🐾");
         System.out.println("Sistema de Gestión de Mascotas\n");
 
-        cargarDatosEjemplo();
+        cargarDatosEjemplo(); // Cargar datos de ejemplo en el ÁRBOL BINARIO puede comentarlo para evitarlos
         menuPrincipal();
     }
 
     private static void cargarDatosEjemplo() {
         // Agregar mascotas al ÁRBOL BINARIO
-        inventario.insertar(new Mascota("Max", 150000, "Perro", "Labrador", 24));
-        inventario.insertar(new Mascota("Luna", 120000, "Gato", "Siamés", 18));
-        inventario.insertar(new Mascota("Rocky", 180000, "Perro", "Pastor Alemán", 36));
-        inventario.insertar(new Mascota("Bobby", 130000, "Perro", "Beagle", 20));
+        tienda.getInventario().insertar(new Mascota("Max", 150000, "Perro", "Labrador", 24));
+        tienda.getInventario().insertar(new Mascota("Luna", 120000, "Gato", "Siamés", 18));
+        tienda.getInventario().insertar(new Mascota("Rocky", 180000, "Perro", "Pastor Alemán", 36));
+        tienda.getInventario().insertar(new Mascota("Bobby", 130000, "Perro", "Beagle", 20));
 
-        System.out.println("Inventario cargado con " + inventario.getTamaño() + " mascotas en ÁRBOL BINARIO.");
+        System.out.println("Inventario cargado con " + tienda.getInventario().getTamaño() + " mascotas en ÁRBOL BINARIO.");
     }
 
     public static void menuPrincipal() {
@@ -94,7 +93,7 @@ public class Main {
                     buscarMascotaInventario();
                     break;
                 case 3:
-                    inventario.inOrder();
+                    tienda.getInventario().inOrder();
                     break;
                 case 4:
                     break;
@@ -126,10 +125,10 @@ public class Main {
 
         Mascota nuevaMascota = new Mascota(nombre, precio, especie, raza, edad);
 
-        if (inventario.insertar(nuevaMascota)) {
-            System.out.println("✅ Mascota agregada al ÁRBOL BINARIO exitosamente.");
+        if (tienda.getInventario().insertar(nuevaMascota)) {
+            System.out.println("Mascota agregada al ÁRBOL BINARIO exitosamente.");
         } else {
-            System.out.println("❌ Error: Ya existe una mascota con ese nombre.");
+            System.out.println("Error: Ya existe una mascota con ese nombre.");
         }
     }
 
@@ -138,12 +137,12 @@ public class Main {
         System.out.print("Ingrese el nombre: ");
         String nombre = scanner.nextLine();
 
-        Mascota mascota = inventario.buscar(nombre);
+        Mascota mascota = tienda.getInventario().buscar(nombre);
         if (mascota != null) {
-            System.out.println("✅ Mascota encontrada:");
+            System.out.println("Mascota encontrada:");
             System.out.println(mascota);
         } else {
-            System.out.println("❌ No se encontró la mascota.");
+            System.out.println("No se encontró la mascota.");
         }
     }
 
@@ -181,11 +180,6 @@ public class Main {
     }
 
     private static void agregarClienteCola() {
-        if (tamañoCola >= CAPACIDAD_COLA) {
-            System.out.println("❌ Error: La cola está llena.");
-            return;
-        }
-
         System.out.println("\n--- Agregar Cliente a la Cola ---");
 
         System.out.print("Nombre: ");
@@ -199,7 +193,7 @@ public class Main {
         scanner.nextLine();
 
         if (prioridad < 1 || prioridad > 3) {
-            System.out.println("❌ Error: Prioridad debe ser 1, 2 o 3.");
+            System.out.println("Error: Prioridad debe ser 1, 2 o 3.");
             return;
         }
 
@@ -213,7 +207,7 @@ public class Main {
             System.out.print("Nombre de la mascota: ");
             String nombreMascota = scanner.nextLine();
 
-            Mascota mascota = inventario.buscar(nombreMascota);
+            Mascota mascota = tienda.getInventario().buscar(nombreMascota);
             if (mascota != null) {
                 Mascota copia = new Mascota(
                         mascota.getNombre(),
@@ -223,9 +217,9 @@ public class Main {
                         mascota.getEdad()
                 );
                 nuevoCliente.getCarrito().insertarAlFinal(copia);
-                System.out.println("✅ Mascota agregada al carrito.");
+                System.out.println("Mascota agregada al carrito.");
             } else {
-                System.out.println("❌ Mascota no encontrada en inventario.");
+                System.out.println("Mascota no encontrada en inventario.");
             }
 
             System.out.println("¿Agregar otra mascota? (s/n): ");
@@ -233,66 +227,36 @@ public class Main {
         }
 
         // Insertar en cola
-        fin = (fin + 1) % CAPACIDAD_COLA;
-        colaClientes[fin] = nuevoCliente;
-        tamañoCola++;
-
-        System.out.println("✅ Cliente agregado a la cola exitosamente.");
+        boolean ok = tienda.getColaClientes().encolar(nuevoCliente);
+        if (ok) {
+            System.out.println("Cliente agregado a la cola exitosamente.");
+        } else {
+            System.out.println("Error: La cola está llena.");
+        }
     }
 
     private static void procesarAtencion() {
-        if (tamañoCola == 0) {
-            System.out.println("❌ No hay clientes en la cola.");
+        if (tienda.getColaClientes().estaVacia()) {
+            System.out.println("No hay clientes en la cola.");
             return;
         }
 
-        // Buscar cliente con mayor prioridad
-        int maxPrioridad = -1;
-        int posicionMax = -1;
+        Cliente clienteAtendido = tienda.getColaClientes().desencolarPorPrioridad();
 
-        for (int i = 0; i < tamañoCola; i++) {
-            int index = (frente + i) % CAPACIDAD_COLA;
-            if (colaClientes[index].getPrioridad() > maxPrioridad) {
-                maxPrioridad = colaClientes[index].getPrioridad();
-                posicionMax = index;
-            }
-        }
-
-        if (posicionMax != -1) {
-            Cliente clienteAtendido = colaClientes[posicionMax];
-
+        if (clienteAtendido != null) {
             System.out.println("\n--- ATENDIENDO CLIENTE ---");
             System.out.println(clienteAtendido.generarFactura());
-
-            // Reorganizar cola
-            for (int i = posicionMax; i != fin; i = (i + 1) % CAPACIDAD_COLA) {
-                int siguiente = (i + 1) % CAPACIDAD_COLA;
-                colaClientes[i] = colaClientes[siguiente];
-            }
-
-            fin = (fin - 1 + CAPACIDAD_COLA) % CAPACIDAD_COLA;
-            tamañoCola--;
-
-            System.out.println("✅ Cliente atendido y removido de la cola.");
+            System.out.println("Cliente atendido y removido de la cola.");
         }
     }
 
     private static void verSiguienteCliente() {
-        if (tamañoCola == 0) {
-            System.out.println("❌ No hay clientes en la cola.");
+        if (tienda.getColaClientes().estaVacia()) {
+            System.out.println("No hay clientes en la cola.");
             return;
         }
 
-        int maxPrioridad = -1;
-        Cliente siguiente = null;
-
-        for (int i = 0; i < tamañoCola; i++) {
-            int index = (frente + i) % CAPACIDAD_COLA;
-            if (colaClientes[index].getPrioridad() > maxPrioridad) {
-                maxPrioridad = colaClientes[index].getPrioridad();
-                siguiente = colaClientes[index];
-            }
-        }
+        Cliente siguiente = tienda.getColaClientes().verSiguientePorPrioridad();
 
         if (siguiente != null) {
             System.out.println("Siguiente cliente a atender:");
@@ -301,24 +265,24 @@ public class Main {
     }
 
     private static void mostrarColaClientes() {
-        if (tamañoCola == 0) {
+        if (tienda.getColaClientes().estaVacia()) {
             System.out.println("La cola está vacía.");
             return;
         }
 
         System.out.println("\n=== COLA DE CLIENTES ===");
-        for (int i = 0; i < tamañoCola; i++) {
-            int index = (frente + i) % CAPACIDAD_COLA;
-            System.out.println((i + 1) + ". " + colaClientes[index]);
+        Cliente[] clientes = tienda.getColaClientes().snapshot();
+        for (int i = 0; i < clientes.length; i++) {
+            System.out.println((i + 1) + ". " + clientes[i]);
         }
     }
 
     private static void verEstadoSistema() {
         System.out.println("\n=== ESTADO DEL SISTEMA ===");
-        System.out.println("Mascotas en inventario (Árbol Binario): " + inventario.getTamaño());
-        System.out.println("Clientes en cola: " + tamañoCola);
+        System.out.println("Mascotas en inventario (Árbol Binario): " + tienda.getInventario().getTamaño());
+        System.out.println("Clientes en cola: " + tienda.getColaClientes().getTamaño());
 
         System.out.println("\nInventario actual (ordenado por nombre):");
-        inventario.inOrder();
+        tienda.getInventario().inOrder();
     }
 }

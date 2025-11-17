@@ -1,6 +1,6 @@
-package src.view;
+package view;
 
-import src.entities.Mascota;
+import entities.Mascota;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 import java.util.function.Consumer;
 import javax.swing.*;
-import src.lists.ListaMascotas;
+import lists.ListaMascotas;
 
 
     public class PanelManager {
