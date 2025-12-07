@@ -1,6 +1,7 @@
 package lists;
 
 import entities.Cliente;
+import entities.Ubicacion;
 
 public class ColaClientes {
     private Cliente[] datos;
@@ -8,28 +9,34 @@ public class ColaClientes {
     private int fin;
     private int tamaño;
     private final int capacidad;
+    private GrafoUbicaciones grafo; // Referencia al grafo para agregar ubicaciones
 
-    public ColaClientes(int capacidad) {
+    public ColaClientes(int capacidad, GrafoUbicaciones grafo) {
         this.capacidad = capacidad;
         this.datos = new Cliente[capacidad];
         this.frente = 0;
         this.fin = -1;
         this.tamaño = 0;
+        this.grafo = grafo;
     }
 
-    // Encola al final (manteniendo orden de llegada para desempate)
     public boolean encolar(Cliente c) {
         if (tamaño == capacidad) return false;
+        
+        // Agregar ubicación del cliente al grafo automáticamente
+        grafo.agregarUbicacion(c.getUbicacion());
+        
         fin = (fin + 1) % capacidad;
         datos[fin] = c;
         tamaño++;
         return true;
     }
 
-    // Vista del siguiente por prioridad (sin remover)
     public Cliente verSiguientePorPrioridad() {
         if (tamaño == 0) return null;
-        int max = -1; Cliente candidato = null; int posCandidato = -1;
+        int max = -1; 
+        Cliente candidato = null; 
+        int posCandidato = -1;
 
         for (int i = 0; i < tamaño; i++) {
             int idx = (frente + i) % capacidad;
@@ -37,17 +44,17 @@ public class ColaClientes {
             if (actual.getPrioridad() > max) {
                 max = actual.getPrioridad();
                 candidato = actual;
-                posCandidato = i; // “distancia” desde el frente para desempate
+                posCandidato = i;
             }
         }
         return candidato;
     }
 
-    // Desencola por prioridad: remueve el candidato y compacta
     public Cliente desencolarPorPrioridad() {
         if (tamaño == 0) return null;
 
-        int max = -1; int posReal = -1; // índice real en el arreglo
+        int max = -1; 
+        int posReal = -1;
         int mejorDistancia = Integer.MAX_VALUE;
 
         for (int i = 0; i < tamaño; i++) {
@@ -63,7 +70,6 @@ public class ColaClientes {
 
         Cliente atendido = datos[posReal];
 
-        // Compactar desde posReal hacia fin
         int i = posReal;
         while (i != fin) {
             int siguiente = (i + 1) % capacidad;
@@ -77,10 +83,14 @@ public class ColaClientes {
         return atendido;
     }
 
-    public int getTamaño() { return tamaño; }
-    public boolean estaVacia() { return tamaño == 0; }
+    public int getTamaño() { 
+        return tamaño; 
+    }
+    
+    public boolean estaVacia() { 
+        return tamaño == 0; 
+    }
 
-    // Iteración simple para imprimir estado
     public Cliente[] snapshot() {
         Cliente[] arr = new Cliente[tamaño];
         for (int i = 0; i < tamaño; i++) {
