@@ -6,7 +6,6 @@ public class ListaMascotas {
     private NodoLista primero;
     private int tamaño;
 
-    // Nodo para lista enlazada simple
     private static class NodoLista {
         private Mascota mascota;
         private NodoLista siguiente;
@@ -22,7 +21,6 @@ public class ListaMascotas {
         this.tamaño = 0;
     }
 
-    // Insertar al final (para carrito)
     public void insertarAlFinal(Mascota mascota) {
         NodoLista nuevoNodo = new NodoLista(mascota);
 
@@ -38,12 +36,11 @@ public class ListaMascotas {
         tamaño++;
     }
 
-    // Generar reporte de costos para factura
     public String generarReporteCostos() {
         StringBuilder reporte = new StringBuilder();
 
         if (primero == null) {
-            return "El carrito está vacío.\n";
+            return "El carrito esta vacio.\n";
         }
 
         NodoLista actual = primero;
@@ -66,7 +63,11 @@ public class ListaMascotas {
         return reporte.toString();
     }
 
-    // Getters
-    public int getTamaño() { return tamaño; }
-    public boolean estaVacia() { return primero == null; }
+    public int getTamaño() { 
+        return tamaño; 
+    }
+    
+    public boolean estaVacia() { 
+        return primero == null; 
+    }
 }

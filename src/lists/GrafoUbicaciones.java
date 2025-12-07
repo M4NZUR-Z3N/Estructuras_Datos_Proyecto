@@ -36,12 +36,14 @@ public class GrafoUbicaciones {
                !listaAdyacencia.get(ubicacion).isEmpty();
     }
 
-    public Map<Ubicacion, Integer> dijkstra(Ubicacion inicio) {
+    public Map<Ubicacion, ResultadoDijkstra> dijkstraCompleto(Ubicacion inicio) {
         Map<Ubicacion, Integer> distancias = new HashMap<>();
+        Map<Ubicacion, Ubicacion> predecesores = new HashMap<>();
         PriorityQueue<NodoDijkstra> cola = new PriorityQueue<>(Comparator.comparingInt(NodoDijkstra::getDistancia));
 
         for (Ubicacion u : listaAdyacencia.keySet()) {
             distancias.put(u, Integer.MAX_VALUE);
+            predecesores.put(u, null);
         }
 
         distancias.put(inicio, 0);
@@ -56,12 +58,41 @@ public class GrafoUbicaciones {
 
                 if (nuevaDist < distancias.get(vecino)) {
                     distancias.put(vecino, nuevaDist);
+                    predecesores.put(vecino, actual.getUbicacion());
                     cola.add(new NodoDijkstra(vecino, nuevaDist));
                 }
             }
         }
 
-        return distancias;
+        Map<Ubicacion, ResultadoDijkstra> resultado = new HashMap<>();
+        for (Ubicacion u : listaAdyacencia.keySet()) {
+            resultado.put(u, new ResultadoDijkstra(distancias.get(u), predecesores.get(u)));
+        }
+        
+        return resultado;
+    }
+
+    public List<Ubicacion> reconstruirCamino(Ubicacion inicio, Ubicacion destino, Map<Ubicacion, ResultadoDijkstra> resultadoDijkstra) {
+        List<Ubicacion> camino = new ArrayList<>();
+        
+        if (!resultadoDijkstra.containsKey(destino) || 
+            resultadoDijkstra.get(destino).getDistancia() == Integer.MAX_VALUE) {
+            return camino;
+        }
+        
+        Ubicacion actual = destino;
+        while (actual != null) {
+            camino.add(actual);
+            actual = resultadoDijkstra.get(actual).getPredecesor();
+        }
+        
+        Collections.reverse(camino);
+        
+        if (!camino.isEmpty() && camino.get(0).equals(inicio)) {
+            return camino;
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     public void mostrarGrafo() {
@@ -90,6 +121,24 @@ public class GrafoUbicaciones {
         
         public int getDistancia() { 
             return distancia; 
+        }
+    }
+
+    public static class ResultadoDijkstra {
+        private int distancia;
+        private Ubicacion predecesor;
+
+        public ResultadoDijkstra(int distancia, Ubicacion predecesor) {
+            this.distancia = distancia;
+            this.predecesor = predecesor;
+        }
+
+        public int getDistancia() { 
+            return distancia; 
+        }
+        
+        public Ubicacion getPredecesor() { 
+            return predecesor; 
         }
     }
 }

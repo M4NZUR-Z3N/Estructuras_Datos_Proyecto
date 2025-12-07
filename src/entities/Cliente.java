@@ -1,5 +1,6 @@
 package entities;
 import lists.ListaMascotas;
+import java.util.List;
 
 public class Cliente {
     private String nombre;
@@ -52,25 +53,55 @@ public class Cliente {
         return carrito; 
     }
 
-    public String generarFactura() {
+    public String generarFacturaConRuta(List<Ubicacion> camino, int distanciaTotal) {
         StringBuilder factura = new StringBuilder();
-        factura.append("=== FACTURA FRIENDS FOR LIFE ===\n");
-        factura.append("Cliente: ").append(nombre).append("\n");
-        factura.append("Cédula: ").append(cedula).append("\n");
-        factura.append("Ubicación: ").append(ubicacion.getNombre()).append("\n");
-        factura.append("Prioridad: ").append(prioridad).append("\n");
-        factura.append("--- Productos en Carrito ---\n");
+        factura.append("======================================\n");
+        factura.append("       FACTURA - FRIENDS FOR LIFE     \n");
+        factura.append("======================================\n");
+        factura.append("CLIENTE: ").append(nombre).append("\n");
+        factura.append("CEDULA:  ").append(cedula).append("\n");
+        factura.append("PRIORIDAD: ").append(prioridad);
+        if (prioridad == 1) factura.append(" (Basico)");
+        else if (prioridad == 2) factura.append(" (Afiliado)");
+        else factura.append(" (Premium)");
+        factura.append("\n");
+        factura.append("UBICACION: ").append(ubicacion.getNombre()).append("\n");
+        factura.append("--------------------------------------\n");
+        factura.append("      PRODUCTOS EN CARRITO           \n");
+        factura.append("--------------------------------------\n");
         
         String reporteCarrito = carrito.generarReporteCostos();
         factura.append(reporteCarrito);
-        factura.append("================\n");
+        
+        factura.append("--------------------------------------\n");
+        factura.append("          RUTA DE ENTREGA            \n");
+        factura.append("--------------------------------------\n");
+        
+        if (camino.isEmpty()) {
+            factura.append("NO HAY RUTA DISPONIBLE\n");
+        } else {
+            factura.append("Distancia total: ").append(distanciaTotal).append(" km\n");
+            factura.append("Ruta optima:\n");
+            
+            String rutaStr = "";
+            for (int i = 0; i < camino.size(); i++) {
+                rutaStr += camino.get(i).getNombre();
+                if (i < camino.size() - 1) {
+                    rutaStr += " -> ";
+                }
+            }
+            
+            factura.append(rutaStr).append("\n");
+        }
+        
+        factura.append("======================================\n");
         
         return factura.toString();
     }
 
     @Override
     public String toString() {
-        return String.format("Cliente: %s | Cédula: %s | Ubicación: %s | Prioridad: %d | Productos: %d",
+        return String.format("Cliente: %s | Cedula: %s | Ubicacion: %s | Prioridad: %d | Productos: %d",
                 nombre, cedula, ubicacion.getNombre(), prioridad, carrito.getTamaño());
     }
 }

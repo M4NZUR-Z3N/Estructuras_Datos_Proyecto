@@ -9,7 +9,7 @@ public class ColaClientes {
     private int fin;
     private int tamaño;
     private final int capacidad;
-    private GrafoUbicaciones grafo; // Referencia al grafo para agregar ubicaciones
+    private GrafoUbicaciones grafo;
 
     public ColaClientes(int capacidad, GrafoUbicaciones grafo) {
         this.capacidad = capacidad;
@@ -23,7 +23,6 @@ public class ColaClientes {
     public boolean encolar(Cliente c) {
         if (tamaño == capacidad) return false;
         
-        // Agregar ubicación del cliente al grafo automáticamente
         grafo.agregarUbicacion(c.getUbicacion());
         
         fin = (fin + 1) % capacidad;

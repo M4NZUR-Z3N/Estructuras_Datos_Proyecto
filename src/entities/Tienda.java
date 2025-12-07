@@ -17,7 +17,7 @@ public class Tienda {
         this.inventario = new ArbolMascotas();
         this.grafoUbicaciones = new GrafoUbicaciones();
         this.grafoUbicaciones.agregarUbicacion(ubicacionTienda);
-        this.colaClientes = new ColaClientes(capacidadCola, this.grafoUbicaciones); // ¡CORREGIDO!
+        this.colaClientes = new ColaClientes(capacidadCola, this.grafoUbicaciones);
     }
 
     public ArbolMascotas getInventario() { 

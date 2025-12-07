@@ -1,8 +1,6 @@
 package main;
 
 import entities.*;
-import lists.ArbolMascotas;
-import lists.ColaClientes;
 import lists.GrafoUbicaciones;
 import java.util.*;
 
@@ -12,18 +10,15 @@ public class Main {
     private static List<Ubicacion> ubicacionesDisponibles;
 
     public static void main(String[] args) {
-        // Inicializar ubicaciones de Costa Rica
         inicializarUbicacionesCR();
         
-        // Crear tienda con ubicación en San José
         Ubicacion ubicacionTienda = buscarUbicacionPorCodigo("SJ01");
         tienda = new Tienda("Friends for Life", ubicacionTienda, 50);
         
-        // Inicializar grafo con conexiones de Costa Rica
         inicializarGrafoCostaRica();
         
-        System.out.println("🐾 BIENVENIDO A FRIENDS FOR LIFE 🐾");
-        System.out.println("Sistema de Gestión de Mascotas y Entregas\n");
+        System.out.println("BIENVENIDO A FRIENDS FOR LIFE");
+        System.out.println("Sistema de Gestion de Mascotas y Entregas\n");
         
         cargarDatosEjemplo();
         menuPrincipal();
@@ -32,14 +27,13 @@ public class Main {
     private static void inicializarUbicacionesCR() {
         ubicacionesDisponibles = new ArrayList<>();
         
-        // Provincias principales de Costa Rica
-        ubicacionesDisponibles.add(new Ubicacion("San José Centro", "SJ01"));
+        ubicacionesDisponibles.add(new Ubicacion("San Jose Centro", "SJ01"));
         ubicacionesDisponibles.add(new Ubicacion("Alajuela Centro", "AL01"));
         ubicacionesDisponibles.add(new Ubicacion("Heredia Centro", "HE01"));
         ubicacionesDisponibles.add(new Ubicacion("Cartago Centro", "CA01"));
         ubicacionesDisponibles.add(new Ubicacion("Puntarenas Centro", "PU01"));
-        ubicacionesDisponibles.add(new Ubicacion("Limón Centro", "LI01"));
-        ubicacionesDisponibles.add(new Ubicacion("Escazú", "SJ02"));
+        ubicacionesDisponibles.add(new Ubicacion("Limon Centro", "LI01"));
+        ubicacionesDisponibles.add(new Ubicacion("Escazu", "SJ02"));
         ubicacionesDisponibles.add(new Ubicacion("Desamparados", "SJ03"));
         ubicacionesDisponibles.add(new Ubicacion("Liberia", "GU01"));
     }
@@ -54,7 +48,6 @@ public class Main {
     }
 
     private static void inicializarGrafoCostaRica() {
-        // Obtener ubicaciones
         Ubicacion sj = buscarUbicacionPorCodigo("SJ01");
         Ubicacion al = buscarUbicacionPorCodigo("AL01");
         Ubicacion he = buscarUbicacionPorCodigo("HE01");
@@ -65,21 +58,17 @@ public class Main {
         Ubicacion de = buscarUbicacionPorCodigo("SJ03");
         Ubicacion gu = buscarUbicacionPorCodigo("GU01");
 
-        // Conexiones con distancias aproximadas en km
         GrafoUbicaciones grafo = tienda.getGrafoUbicaciones();
         
-        // Conexiones desde San José
-        grafo.agregarConexion(sj, al, 18);   // San José - Alajuela
-        grafo.agregarConexion(sj, he, 10);   // San José - Heredia
-        grafo.agregarConexion(sj, ca, 24);   // San José - Cartago
-        grafo.agregarConexion(sj, es, 8);    // San José - Escazú
-        grafo.agregarConexion(sj, de, 6);    // San José - Desamparados
-        
-        // Otras conexiones
-        grafo.agregarConexion(al, he, 25);   // Alajuela - Heredia
-        grafo.agregarConexion(al, gu, 150);  // Alajuela - Liberia
-        grafo.agregarConexion(ca, li, 85);   // Cartago - Limón
-        grafo.agregarConexion(sj, pu, 90);   // San José - Puntarenas
+        grafo.agregarConexion(sj, al, 18);
+        grafo.agregarConexion(sj, he, 10);
+        grafo.agregarConexion(sj, ca, 24);
+        grafo.agregarConexion(sj, es, 8);
+        grafo.agregarConexion(sj, de, 6);
+        grafo.agregarConexion(al, he, 25);
+        grafo.agregarConexion(al, gu, 150);
+        grafo.agregarConexion(ca, li, 85);
+        grafo.agregarConexion(sj, pu, 90);
         
         System.out.println("Grafo de ubicaciones inicializado con " + 
                           grafo.getConexiones(sj).size() + " conexiones desde la tienda.");
@@ -87,8 +76,8 @@ public class Main {
 
     private static void cargarDatosEjemplo() {
         tienda.getInventario().insertar(new Mascota("Max", 150000, "Perro", "Labrador", 24));
-        tienda.getInventario().insertar(new Mascota("Luna", 120000, "Gato", "Siamés", 18));
-        tienda.getInventario().insertar(new Mascota("Rocky", 180000, "Perro", "Pastor Alemán", 36));
+        tienda.getInventario().insertar(new Mascota("Luna", 120000, "Gato", "Siames", 18));
+        tienda.getInventario().insertar(new Mascota("Rocky", 180000, "Perro", "Pastor Aleman", 36));
         tienda.getInventario().insertar(new Mascota("Bobby", 130000, "Perro", "Beagle", 20));
         
         System.out.println("Inventario cargado con " + tienda.getInventario().getTamaño() + " mascotas.");
@@ -98,14 +87,14 @@ public class Main {
         int opcion;
 
         do {
-            System.out.println("\n=== MENÚ PRINCIPAL ===");
-            System.out.println("1. Gestión de Inventario (Árbol Binario)");
-            System.out.println("2. Gestión de Clientes");
-            System.out.println("3. Gestión de Ubicaciones y Rutas");
-            System.out.println("4. Procesar Atención de Clientes");
+            System.out.println("\n=== MENU PRINCIPAL ===");
+            System.out.println("1. Gestion de Inventario (Arbol Binario)");
+            System.out.println("2. Gestion de Clientes");
+            System.out.println("3. Gestion de Ubicaciones y Rutas");
+            System.out.println("4. Procesar Atencion de Clientes");
             System.out.println("5. Ver Estado del Sistema");
             System.out.println("6. Salir");
-            System.out.print("Seleccione una opción: ");
+            System.out.print("Seleccione una opcion: ");
 
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -127,10 +116,10 @@ public class Main {
                     verEstadoSistema();
                     break;
                 case 6:
-                    System.out.println("¡Gracias por usar Friends for Life!");
+                    System.out.println("Gracias por usar Friends for Life!");
                     break;
                 default:
-                    System.out.println("Opción inválida.");
+                    System.out.println("Opcion invalida.");
             }
         } while (opcion != 6);
     }
@@ -139,12 +128,12 @@ public class Main {
         int opcion;
 
         do {
-            System.out.println("\n=== GESTIÓN DE INVENTARIO ===");
+            System.out.println("\n=== GESTION DE INVENTARIO ===");
             System.out.println("1. Agregar mascota al inventario");
             System.out.println("2. Buscar mascota en inventario");
             System.out.println("3. Mostrar inventario ordenado");
-            System.out.println("4. Volver al menú principal");
-            System.out.print("Seleccione una opción: ");
+            System.out.println("4. Volver al menu principal");
+            System.out.print("Seleccione una opcion: ");
 
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -162,7 +151,7 @@ public class Main {
                 case 4:
                     break;
                 default:
-                    System.out.println("Opción inválida.");
+                    System.out.println("Opcion invalida.");
             }
         } while (opcion != 4);
     }
@@ -206,7 +195,7 @@ public class Main {
             System.out.println("Mascota encontrada:");
             System.out.println(mascota);
         } else {
-            System.out.println("No se encontró la mascota.");
+            System.out.println("No se encontro la mascota.");
         }
     }
 
@@ -214,12 +203,12 @@ public class Main {
         int opcion;
 
         do {
-            System.out.println("\n=== GESTIÓN DE CLIENTES ===");
+            System.out.println("\n=== GESTION DE CLIENTES ===");
             System.out.println("1. Agregar cliente a la cola");
             System.out.println("2. Ver siguiente cliente");
             System.out.println("3. Mostrar cola de clientes");
-            System.out.println("4. Volver al menú principal");
-            System.out.print("Seleccione una opción: ");
+            System.out.println("4. Volver al menu principal");
+            System.out.print("Seleccione una opcion: ");
 
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -237,7 +226,7 @@ public class Main {
                 case 4:
                     break;
                 default:
-                    System.out.println("Opción inválida.");
+                    System.out.println("Opcion invalida.");
             }
         } while (opcion != 4);
     }
@@ -248,10 +237,10 @@ public class Main {
         System.out.print("Nombre: ");
         String nombre = scanner.nextLine();
         
-        System.out.print("Cédula: ");
+        System.out.print("Cedula: ");
         String cedula = scanner.nextLine();
         
-        System.out.print("Prioridad (1=Básico, 2=Afiliado, 3=Premium): ");
+        System.out.print("Prioridad (1=Basico, 2=Afiliado, 3=Premium): ");
         int prioridad = scanner.nextInt();
         scanner.nextLine();
         
@@ -260,25 +249,23 @@ public class Main {
             return;
         }
         
-        // Seleccionar ubicación
         System.out.println("\nUbicaciones disponibles:");
         for (int i = 0; i < ubicacionesDisponibles.size(); i++) {
             System.out.println((i + 1) + ". " + ubicacionesDisponibles.get(i));
         }
-        System.out.print("Seleccione ubicación (número): ");
+        System.out.print("Seleccione ubicacion (numero): ");
         int idxUbicacion = scanner.nextInt() - 1;
         scanner.nextLine();
         
         if (idxUbicacion < 0 || idxUbicacion >= ubicacionesDisponibles.size()) {
-            System.out.println("Ubicación inválida.");
+            System.out.println("Ubicacion invalida.");
             return;
         }
         
         Ubicacion ubicacionCliente = ubicacionesDisponibles.get(idxUbicacion);
         Cliente nuevoCliente = new Cliente(nombre, cedula, prioridad, ubicacionCliente);
         
-        // Agregar mascotas al carrito
-        System.out.println("¿Desea agregar mascotas al carrito? (s/n): ");
+        System.out.println("Desea agregar mascotas al carrito? (s/n): ");
         String respuesta = scanner.nextLine();
         
         while (respuesta.equalsIgnoreCase("s")) {
@@ -300,16 +287,15 @@ public class Main {
                 System.out.println("Mascota no encontrada en inventario.");
             }
             
-            System.out.println("¿Agregar otra mascota? (s/n): ");
+            System.out.println("Agregar otra mascota? (s/n): ");
             respuesta = scanner.nextLine();
         }
         
-        // Insertar en cola
         boolean ok = tienda.getColaClientes().encolar(nuevoCliente);
         if (ok) {
             System.out.println("Cliente agregado a la cola exitosamente.");
         } else {
-            System.out.println("Error: La cola está llena.");
+            System.out.println("Error: La cola esta llena.");
         }
     }
 
@@ -317,13 +303,13 @@ public class Main {
         int opcion;
 
         do {
-            System.out.println("\n=== GESTIÓN DE UBICACIONES Y RUTAS ===");
-            System.out.println("1. Agregar nueva ubicación");
-            System.out.println("2. Agregar conexión entre ubicaciones");
+            System.out.println("\n=== GESTION DE UBICACIONES Y RUTAS ===");
+            System.out.println("1. Agregar nueva ubicacion");
+            System.out.println("2. Agregar conexion entre ubicaciones");
             System.out.println("3. Mostrar grafo de ubicaciones");
-            System.out.println("4. Calcular ruta óptima");
-            System.out.println("5. Volver al menú principal");
-            System.out.print("Seleccione una opción: ");
+            System.out.println("4. Calcular ruta optima (con camino)");
+            System.out.println("5. Volver al menu principal");
+            System.out.print("Seleccione una opcion: ");
 
             opcion = scanner.nextInt();
             scanner.nextLine();
@@ -339,44 +325,44 @@ public class Main {
                     tienda.getGrafoUbicaciones().mostrarGrafo();
                     break;
                 case 4:
-                    calcularRutaOptima();
+                    calcularYRutaEspecifica();
                     break;
                 case 5:
                     break;
                 default:
-                    System.out.println("Opción inválida.");
+                    System.out.println("Opcion invalida.");
             }
         } while (opcion != 5);
     }
 
     private static void agregarUbicacion() {
-        System.out.println("\n--- Agregar Nueva Ubicación ---");
+        System.out.println("\n--- Agregar Nueva Ubicacion ---");
         
-        System.out.print("Nombre de la ubicación: ");
+        System.out.print("Nombre de la ubicacion: ");
         String nombre = scanner.nextLine();
         
-        System.out.print("Código único (ej: SJ04): ");
+        System.out.print("Codigo unico (ej: SJ04): ");
         String codigo = scanner.nextLine();
         
         Ubicacion nuevaUbicacion = new Ubicacion(nombre, codigo);
         ubicacionesDisponibles.add(nuevaUbicacion);
         tienda.getGrafoUbicaciones().agregarUbicacion(nuevaUbicacion);
         
-        System.out.println("Ubicación agregada exitosamente.");
+        System.out.println("Ubicacion agregada exitosamente.");
     }
 
     private static void agregarConexion() {
-        System.out.println("\n--- Agregar Conexión entre Ubicaciones ---");
+        System.out.println("\n--- Agregar Conexion entre Ubicaciones ---");
         
         System.out.println("Ubicaciones disponibles:");
         for (int i = 0; i < ubicacionesDisponibles.size(); i++) {
             System.out.println((i + 1) + ". " + ubicacionesDisponibles.get(i));
         }
         
-        System.out.print("Seleccione ubicación de origen (número): ");
+        System.out.print("Seleccione ubicacion de origen (numero): ");
         int idxOrigen = scanner.nextInt() - 1;
         
-        System.out.print("Seleccione ubicación de destino (número): ");
+        System.out.print("Seleccione ubicacion de destino (numero): ");
         int idxDestino = scanner.nextInt() - 1;
         
         System.out.print("Distancia en km: ");
@@ -385,7 +371,7 @@ public class Main {
         
         if (idxOrigen < 0 || idxOrigen >= ubicacionesDisponibles.size() ||
             idxDestino < 0 || idxDestino >= ubicacionesDisponibles.size()) {
-            System.out.println("Ubicación inválida.");
+            System.out.println("Ubicacion invalida.");
             return;
         }
         
@@ -393,46 +379,59 @@ public class Main {
         Ubicacion destino = ubicacionesDisponibles.get(idxDestino);
         
         tienda.getGrafoUbicaciones().agregarConexion(origen, destino, distancia);
-        System.out.println("Conexión agregada exitosamente.");
+        System.out.println("Conexion agregada exitosamente.");
     }
 
-    private static void calcularRutaOptima() {
-        System.out.println("\n--- Calcular Ruta Óptima ---");
+    private static void calcularYRutaEspecifica() {
+        System.out.println("\n--- Calcular Ruta Especifica ---");
         
         System.out.println("Ubicaciones disponibles:");
         for (int i = 0; i < ubicacionesDisponibles.size(); i++) {
             System.out.println((i + 1) + ". " + ubicacionesDisponibles.get(i));
         }
         
-        System.out.print("Seleccione ubicación de destino (número): ");
+        System.out.print("Seleccione ubicacion de destino (numero): ");
         int idxDestino = scanner.nextInt() - 1;
         scanner.nextLine();
         
         if (idxDestino < 0 || idxDestino >= ubicacionesDisponibles.size()) {
-            System.out.println("Ubicación inválida.");
+            System.out.println("Ubicacion invalida.");
             return;
         }
         
         Ubicacion destino = ubicacionesDisponibles.get(idxDestino);
         Ubicacion origen = tienda.getUbicacionTienda();
         
-        // Verificar conexión
         if (!tienda.getGrafoUbicaciones().estaConectada(destino)) {
-            System.out.println("ERROR: La ubicación de destino no está conectada al sistema.");
+            System.out.println("ERROR: La ubicacion de destino no esta conectada al sistema.");
             return;
         }
         
-        // Calcular distancias con Dijkstra
-        Map<Ubicacion, Integer> distancias = tienda.getGrafoUbicaciones().dijkstra(origen);
-        int distanciaTotal = distancias.get(destino);
+        Map<Ubicacion, GrafoUbicaciones.ResultadoDijkstra> resultado = 
+            tienda.getGrafoUbicaciones().dijkstraCompleto(origen);
         
-        System.out.println("\n📍 **RUTA ÓPTIMA DE ENTREGA**");
+        int distanciaTotal = resultado.get(destino).getDistancia();
+        List<Ubicacion> camino = tienda.getGrafoUbicaciones()
+            .reconstruirCamino(origen, destino, resultado);
+        
+        System.out.println("\n** RUTA OPTIMA DE ENTREGA **");
         System.out.println("Desde: " + origen.getNombre());
         System.out.println("Hasta: " + destino.getNombre());
-        System.out.println("Distancia mínima: " + distanciaTotal + " km");
+        System.out.println("Distancia minima: " + distanciaTotal + " km");
         
-        if (distanciaTotal == Integer.MAX_VALUE) {
+        if (camino.isEmpty()) {
             System.out.println("ADVERTENCIA: No hay ruta disponible.");
+        } else {
+            System.out.println("\n** CAMINO COMPLETO: **");
+            for (int i = 0; i < camino.size(); i++) {
+                System.out.print(camino.get(i).getNombre());
+                if (i < camino.size() - 1) {
+                    System.out.print(" -> ");
+                    if ((i + 1) % 3 == 0) System.out.println();
+                }
+            }
+            System.out.println("\n");
+            System.out.println("Total de paradas: " + (camino.size() - 1));
         }
     }
 
@@ -445,35 +444,45 @@ public class Main {
         Cliente clienteAtendido = tienda.getColaClientes().desencolarPorPrioridad();
 
         if (clienteAtendido != null) {
-            // Verificar conexión (según consigna)
             if (!tienda.getGrafoUbicaciones().estaConectada(clienteAtendido.getUbicacion())) {
-                System.out.println("ERROR: La ubicación del cliente no está conectada al sistema de entrega.");
-                System.out.println("El cliente no puede ser atendido hasta que su ubicación esté conectada.");
+                System.out.println("\nERROR: La ubicacion del cliente no esta conectada al sistema de entrega.");
+                System.out.println("   Ubicacion: " + clienteAtendido.getUbicacion().getNombre());
+                System.out.println("   El cliente no puede ser atendido hasta que su ubicacion este conectada.");
                 
-                // Reinsertar cliente en la cola
                 tienda.getColaClientes().encolar(clienteAtendido);
                 return;
             }
 
-            // Calcular ruta óptima con Dijkstra
             Ubicacion origen = tienda.getUbicacionTienda();
             Ubicacion destino = clienteAtendido.getUbicacion();
-            Map<Ubicacion, Integer> distancias = tienda.getGrafoUbicaciones().dijkstra(origen);
-            int distanciaEntrega = distancias.get(destino);
-
-            // Mostrar factura con ruta
-            System.out.println("\n=== ATENDIENDO CLIENTE ===");
-            System.out.println(clienteAtendido.generarFactura());
-            System.out.println("\n📍 **INFORMACIÓN DE ENTREGA**");
-            System.out.println("Tienda: " + origen.getNombre());
-            System.out.println("Destino: " + destino.getNombre());
-            System.out.println("Distancia óptima: " + distanciaEntrega + " km");
             
-            if (distanciaEntrega == Integer.MAX_VALUE) {
-                System.out.println("⚠️ ADVERTENCIA: Aunque está conectada, no hay ruta calculable.");
+            Map<Ubicacion, GrafoUbicaciones.ResultadoDijkstra> resultado = 
+                tienda.getGrafoUbicaciones().dijkstraCompleto(origen);
+            
+            int distanciaEntrega = resultado.get(destino).getDistancia();
+            List<Ubicacion> camino = tienda.getGrafoUbicaciones()
+                .reconstruirCamino(origen, destino, resultado);
+
+            System.out.println("\n==================================================");
+            System.out.println("             ATENDIENDO CLIENTE");
+            System.out.println("==================================================");
+            
+            System.out.println(clienteAtendido.generarFacturaConRuta(camino, distanciaEntrega));
+            
+            System.out.println("\nRESUMEN DE ATENCION:");
+            System.out.println("   * Cliente: " + clienteAtendido.getNombre());
+            System.out.println("   * Ubicacion: " + destino.getNombre());
+            System.out.println("   * Distancia: " + distanciaEntrega + " km");
+            
+            if (!camino.isEmpty()) {
+                System.out.println("   * Paradas: " + camino.size());
+                System.out.println("   * Ruta validada: CONEXION CONFIRMADA");
+            } else {
+                System.out.println("   * Ruta validada: SIN RUTA CALCULABLE");
             }
             
-            System.out.println("Cliente atendido y removido de la cola.");
+            System.out.println("\nCliente atendido y removido de la cola.");
+            System.out.println("==================================================");
         }
     }
 
@@ -493,7 +502,7 @@ public class Main {
 
     private static void mostrarColaClientes() {
         if (tienda.getColaClientes().estaVacia()) {
-            System.out.println("La cola está vacía.");
+            System.out.println("La cola esta vacia.");
             return;
         }
 
@@ -507,7 +516,7 @@ public class Main {
     private static void verEstadoSistema() {
         System.out.println("\n=== ESTADO DEL SISTEMA ===");
         System.out.println("Tienda: " + tienda.getNombre());
-        System.out.println("Ubicación tienda: " + tienda.getUbicacionTienda().getNombre());
+        System.out.println("Ubicacion tienda: " + tienda.getUbicacionTienda().getNombre());
         System.out.println("Mascotas en inventario: " + tienda.getInventario().getTamaño());
         System.out.println("Clientes en cola: " + tienda.getColaClientes().getTamaño());
         System.out.println("Ubicaciones en sistema: " + ubicacionesDisponibles.size());

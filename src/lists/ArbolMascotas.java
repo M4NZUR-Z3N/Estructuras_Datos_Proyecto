@@ -7,7 +7,6 @@ public class ArbolMascotas {
     private NodoArbol raiz;
     private int tamaño;
 
-    // Clase interna para nodo del árbol (como en presentaciones)
     private static class NodoArbol {
         private Mascota mascota;
         private NodoArbol hijoIzquierdo;
@@ -25,7 +24,6 @@ public class ArbolMascotas {
         this.tamaño = 0;
     }
 
-    // Insertar en árbol binario de búsqueda
     public boolean insertar(Mascota mascota) {
         if (raiz == null) {
             raiz = new NodoArbol(mascota);
@@ -39,7 +37,7 @@ public class ArbolMascotas {
         int comparacion = mascota.getNombre().compareToIgnoreCase(actual.mascota.getNombre());
 
         if (comparacion == 0) {
-            return false; // Ya existe
+            return false;
         } else if (comparacion < 0) {
             if (actual.hijoIzquierdo == null) {
                 actual.hijoIzquierdo = new NodoArbol(mascota);
@@ -59,7 +57,6 @@ public class ArbolMascotas {
         }
     }
 
-    // Buscar en árbol
     public Mascota buscar(String nombre) {
         return buscarRecursivo(raiz, nombre);
     }
@@ -80,7 +77,6 @@ public class ArbolMascotas {
         }
     }
 
-    // Recorrido in-order
     public void inOrder() {
         System.out.println("=== INVENTARIO ORDENADO (In-Order) ===");
         inOrderRecursivo(raiz);
@@ -94,7 +90,6 @@ public class ArbolMascotas {
         }
     }
 
-    // Obtener todas las mascotas
     public ArrayList<Mascota> obtenerTodasMascotas() {
         ArrayList<Mascota> mascotas = new ArrayList<>();
         obtenerTodasRecursivo(raiz, mascotas);
@@ -109,7 +104,11 @@ public class ArbolMascotas {
         }
     }
 
-    // Getters
-    public int getTamaño() { return tamaño; }
-    public boolean estaVacio() { return raiz == null; }
+    public int getTamaño() { 
+        return tamaño; 
+    }
+    
+    public boolean estaVacio() { 
+        return raiz == null; 
+    }
 }
